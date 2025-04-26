@@ -1,3 +1,5 @@
+use std::ops::Range;
+
 use bevy::{prelude::*, window::PrimaryWindow};
 use rand::random;
 
@@ -5,7 +7,8 @@ pub const PLAYER_SPEED: f32 = 250.0;
 pub const PLAYER_SCALE: f32 = 30.0;
 pub const ENEMY_SCALE: f32 = 45.0;
 pub const LOG_MOVEMENT: bool = false;
-pub const NUMBER_OF_ENEMIES: usize = 4;
+pub const NUMBER_OF_ENEMIES: usize = 20;
+pub const ENEMY_SPEED_VARIATY: Range<f32> = (25.0)..(750.0);
 
 fn main() {
     App::new()
@@ -15,6 +18,9 @@ fn main() {
         .add_systems(Update, player_movement)
         .add_systems(Update, confine_player_movement)
         .add_systems(Startup, spawn_enemies)
+        .add_systems(Update, enemy_movement)
+        .add_systems(Update, update_enemy_direction)
+        .add_systems(Update, confine_enemy_movement)
         .run();
 }
 
@@ -22,7 +28,10 @@ fn main() {
 pub struct Player {}
 
 #[derive(Component)]
-pub struct Enemy {}
+pub struct Enemy {
+    pub direction: Vec2,
+    pub speed: f32,
+}
 
 pub fn spawn_players(
     mut commands: Commands,
@@ -79,7 +88,10 @@ pub fn spawn_enemies(
                 ..default()
             },
             Transform::from_xyz(random_x, random_y, 0.0),
-            Enemy {},
+            Enemy {
+                direction: Vec2::new(random::<f32>(), random::<f32>()).normalize(),
+                speed: rand::random_range(ENEMY_SPEED_VARIATY),
+            },
         ));
     });
 }
@@ -160,5 +172,64 @@ pub fn confine_player_movement(
         }
 
         player_transform.translation = translation;
+    }
+}
+
+pub fn enemy_movement(mut enemy_query: Query<(&mut Transform, &Enemy)>, time: Res<Time>) {
+    for (mut transfrom, enemy) in enemy_query.iter_mut() {
+        let direction = Vec3::new(enemy.direction.x, enemy.direction.y, 0.0);
+        transfrom.translation += direction * enemy.speed * time.delta_secs();
+    }
+}
+pub fn update_enemy_direction(
+    enemy_query: Query<(&Transform, &mut Enemy)>,
+    windows_query: Query<&Window, With<PrimaryWindow>>,
+    mut commands: Commands,
+    assest_server: Res<AssetServer>,
+) {
+    if let Ok(window) = windows_query.single() {
+        let half_enemy_scale = ENEMY_SCALE / 2.0;
+
+        let x_min = half_enemy_scale;
+        let x_max = window.width() - half_enemy_scale;
+        let y_min = half_enemy_scale;
+        let y_max = window.height() - half_enemy_scale;
+
+        for (transfrom, mut enemy) in enemy_query {
+            if transfrom.translation.x <= x_min || transfrom.translation.x >= x_max {
+                commands.spawn(AudioPlayer::new(assest_server.load("audio/pluck_001.ogg")));
+                enemy.direction.x *= -1.0;
+            }
+            if transfrom.translation.y <= y_min || transfrom.translation.y >= y_max {
+                enemy.direction.y *= -1.0;
+            }
+        }
+    }
+}
+
+pub fn confine_enemy_movement(
+    mut enemy_query: Query<&mut Transform, With<Enemy>>,
+    windw_query: Query<&Window, With<PrimaryWindow>>,
+) {
+    if let Ok(window) = windw_query.single() {
+        let half_enemy_scale = ENEMY_SCALE / 2.0;
+
+        let x_min = half_enemy_scale;
+        let x_max = window.width() - half_enemy_scale;
+        let y_min = half_enemy_scale;
+        let y_max = window.height() - half_enemy_scale;
+
+        for mut transform in enemy_query.iter_mut() {
+            if transform.translation.x > x_max {
+                transform.translation.x = x_max;
+            } else if transform.translation.x < x_min {
+                transform.translation.x = x_min;
+            }
+            if transform.translation.y > y_max {
+                transform.translation.y = y_max;
+            } else if transform.translation.y < y_min {
+                transform.translation.y = y_min;
+            }
+        }
     }
 }
