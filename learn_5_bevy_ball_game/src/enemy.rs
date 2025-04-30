@@ -1,6 +1,24 @@
-use crate::*;
+use crate::{events::GameOver, player::Player, score::Score, settings::*};
+use bevy::{prelude::*, window::PrimaryWindow};
+use rand::random;
 
-use super::components::Enemy;
+#[derive(Component)]
+pub struct Enemy {
+    pub direction: Vec2,
+    pub speed: f32,
+}
+
+#[derive(Resource)]
+pub struct EnemySpawnTime {
+    pub timer: Timer,
+}
+impl Default for EnemySpawnTime {
+    fn default() -> Self {
+        Self {
+            timer: Timer::from_seconds(ENEMY_SPAWN_TIMER, TimerMode::Repeating),
+        }
+    }
+}
 
 pub fn spawn_enemies(
     mut commands: Commands,

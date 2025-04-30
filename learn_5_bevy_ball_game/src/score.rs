@@ -1,5 +1,22 @@
-use crate::*;
+use bevy::prelude::*;
 
+use crate::events::GameOver;
+
+#[derive(Resource, Default)]
+pub struct Score {
+    pub value: u32,
+}
+
+#[derive(Resource, Debug)]
+pub struct HighScore {
+    pub scores: Vec<(String, u32)>,
+}
+
+impl Default for HighScore {
+    fn default() -> Self {
+        Self { scores: Vec::new() }
+    }
+}
 pub fn update_score(score: Res<Score>) {
     if score.is_changed() {
         println!("Score: {}", score.value);

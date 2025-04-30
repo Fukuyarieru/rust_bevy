@@ -1,4 +1,11 @@
-use crate::*;
+use bevy::{prelude::*, window::PrimaryWindow};
+
+use crate::{score::Score, star::Star};
+
+use crate::settings::*;
+
+#[derive(Component)]
+pub struct Player {}
 
 pub fn spawn_players(
     mut commands: Commands,
@@ -29,25 +36,25 @@ pub fn player_movement(
         let mut directions = Vec3::new(0.0, 0.0, 0.0);
 
         if keyboard_input.pressed(KeyCode::ArrowUp) || keyboard_input.pressed(KeyCode::KeyW) {
-            if LOG_MOVEMENT {
+            if LOG_PLAYER_MOVEMENT {
                 println!("W/UP");
             }
             directions += Vec3::new(0.0, 1.0, 0.0);
         }
         if keyboard_input.pressed(KeyCode::ArrowLeft) || keyboard_input.pressed(KeyCode::KeyA) {
-            if LOG_MOVEMENT {
+            if LOG_PLAYER_MOVEMENT {
                 println!("A/LEFT");
             }
             directions += Vec3::new(-1.0, 0.0, 0.0);
         }
         if keyboard_input.pressed(KeyCode::ArrowDown) || keyboard_input.pressed(KeyCode::KeyS) {
-            if LOG_MOVEMENT {
+            if LOG_PLAYER_MOVEMENT {
                 println!("S/DOWN");
             }
             directions += Vec3::new(0.0, -1.0, 0.0);
         }
         if keyboard_input.pressed(KeyCode::ArrowRight) || keyboard_input.pressed(KeyCode::KeyD) {
-            if LOG_MOVEMENT {
+            if LOG_PLAYER_MOVEMENT {
                 println!("D/RIGHT");
             }
             directions += Vec3::new(1.0, 0.0, 0.0);
@@ -56,7 +63,7 @@ pub fn player_movement(
             directions = directions.normalize();
         }
         if keyboard_input.pressed(KeyCode::ShiftLeft) {
-            if LOG_MOVEMENT {
+            if LOG_PLAYER_MOVEMENT {
                 println!("SHIFT");
             }
             directions = directions + directions;
