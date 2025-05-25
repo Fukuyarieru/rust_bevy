@@ -6,16 +6,34 @@ use crate::settings::*;
 
 pub struct PlayerPlugin;
 
+// #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
+// pub struct MovementSystemSet;
+
+// #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
+// pub struct ConfinementSystemSet;
+
+#[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
+pub enum PlayerSystemSet {
+    Movement,
+    Confinement,
+}
+
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, spawn_players).add_systems(
+        app.configure_sets(
+            Update,
+            PlayerSystemSet::Movement.before(PlayerSystemSet::Confinement),
+        )
+        .add_systems(Startup, spawn_players)
+        .add_systems(
             Update,
             (
-                player_movement.before(confine_player_movement),
-                confine_player_movement,
+                player_movement.in_set(PlayerSystemSet::Movement),
+                confine_player_movement.in_set(PlayerSystemSet::Confinement),
                 player_hit_star,
             ),
         );
+        // add_systems(Update, (player_movement,confine_player_movement).chain())
     }
 }
 
