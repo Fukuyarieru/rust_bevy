@@ -11,7 +11,7 @@ impl Plugin for PlayerPlugin {
         app.add_systems(Startup, spawn_players).add_systems(
             Update,
             (
-                player_movement.after(confine_player_movement),
+                player_movement.before(confine_player_movement),
                 confine_player_movement,
                 player_hit_star,
             ),
