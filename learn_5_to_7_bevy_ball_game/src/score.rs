@@ -2,6 +2,19 @@ use bevy::prelude::*;
 
 use crate::events::GameOver;
 
+pub struct ScorePlugin;
+
+impl Plugin for ScorePlugin {
+    fn build(&self, app: &mut App) {
+        app.init_resource::<Score>()
+            .init_resource::<HighScore>()
+            .add_systems(
+                Update,
+                (update_score, update_high_scores, high_scores_updated),
+            );
+    }
+}
+
 #[derive(Resource, Default)]
 pub struct Score {
     pub value: u32,

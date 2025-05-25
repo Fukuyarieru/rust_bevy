@@ -12,6 +12,27 @@ pub struct Enemy {
 pub struct EnemySpawnTime {
     pub timer: Timer,
 }
+
+pub struct EnemyPlugin;
+
+impl Plugin for EnemyPlugin {
+    fn build(&self, app: &mut App) {
+        app.init_resource::<EnemySpawnTime>()
+            .add_systems(Startup, spawn_enemies)
+            .add_systems(
+                Update,
+                (
+                    tick_enemy_spawn_timer,
+                    spawn_enemies_over_time,
+                    enemy_movement,
+                    confine_enemy_movement,
+                    enemy_hit_player,
+                    update_enemy_direction,
+                ),
+            );
+    }
+}
+
 impl Default for EnemySpawnTime {
     fn default() -> Self {
         Self {

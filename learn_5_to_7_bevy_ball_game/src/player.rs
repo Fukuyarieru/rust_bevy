@@ -4,6 +4,21 @@ use crate::{score::Score, star::Star};
 
 use crate::settings::*;
 
+pub struct PlayerPlugin;
+
+impl Plugin for PlayerPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Startup, spawn_players).add_systems(
+            Update,
+            (
+                player_movement.after(confine_player_movement),
+                confine_player_movement,
+                player_hit_star,
+            ),
+        );
+    }
+}
+
 #[derive(Component)]
 pub struct Player {}
 
