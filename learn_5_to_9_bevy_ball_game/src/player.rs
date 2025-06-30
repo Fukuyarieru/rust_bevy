@@ -1,8 +1,6 @@
 use bevy::{prelude::*, window::PrimaryWindow};
 
-use crate::{score::Score, star::Star};
-
-use crate::settings::*;
+use crate::prelude::*;
 
 pub struct PlayerPlugin;
 

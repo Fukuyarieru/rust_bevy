@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::events::GameOver;
+use crate::prelude::*;
 
 pub struct ScorePlugin;
 

@@ -1,4 +1,4 @@
-use crate::{events::GameOver, player::Player, score::Score, settings::*};
+use crate::prelude::*;
 use bevy::{prelude::*, window::PrimaryWindow};
 use rand::random;
 

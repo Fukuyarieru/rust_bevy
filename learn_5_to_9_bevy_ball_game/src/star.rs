@@ -1,7 +1,7 @@
 use bevy::{prelude::*, window::PrimaryWindow};
 use rand::random;
 
-use crate::settings::*;
+use crate::prelude::*;
 
 #[derive(Component)]
 pub struct Star {}
