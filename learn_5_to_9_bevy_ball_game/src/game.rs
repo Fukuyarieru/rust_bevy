@@ -1,7 +1,6 @@
+use crate::prelude::*;
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
-
-use crate::prelude::*;
 
 pub struct GamePlugin;
 

@@ -31,7 +31,6 @@ impl Plugin for PlayerPlugin {
                 player_hit_star,
             ),
         );
-        // add_systems(Update, (player_movement,confine_player_movement).chain())
     }
 }
 

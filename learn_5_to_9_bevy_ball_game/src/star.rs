@@ -1,7 +1,6 @@
+use crate::prelude::*;
 use bevy::{prelude::*, window::PrimaryWindow};
 use rand::random;
-
-use crate::prelude::*;
 
 #[derive(Component)]
 pub struct Star {}
@@ -20,6 +19,7 @@ impl Plugin for StarPlugin {
 pub struct StarSpawnTimer {
     pub timer: Timer,
 }
+
 impl Default for StarSpawnTimer {
     fn default() -> Self {
         Self {

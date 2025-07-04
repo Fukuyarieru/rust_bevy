@@ -69,12 +69,14 @@ pub fn spawn_enemies(
         ));
     });
 }
+
 pub fn enemy_movement(mut enemy_query: Query<(&mut Transform, &Enemy)>, time: Res<Time>) {
     for (mut transfrom, enemy) in enemy_query.iter_mut() {
         let direction = Vec3::new(enemy.direction.x, enemy.direction.y, 0.0);
         transfrom.translation += direction * enemy.speed * time.delta_secs();
     }
 }
+
 pub fn update_enemy_direction(
     enemy_query: Query<(&Transform, &mut Enemy)>,
     windows_query: Query<&Window, With<PrimaryWindow>>,
@@ -161,9 +163,11 @@ pub fn enemy_hit_player(
         }
     }
 }
+
 pub fn tick_enemy_spawn_timer(mut enemy_spawn_timer: ResMut<EnemySpawnTime>, time: Res<Time>) {
     enemy_spawn_timer.timer.tick(time.delta());
 }
+
 pub fn spawn_enemies_over_time(
     mut commands: Commands,
     windows_query: Query<&Window, With<PrimaryWindow>>,
