@@ -1,4 +1,4 @@
-use crate::prelude::*;
+use crate::imports::*;
 use bevy::{prelude::*, window::PrimaryWindow};
 use rand::random;
 
@@ -28,7 +28,9 @@ impl Plugin for EnemyPlugin {
                     confine_enemy_movement,
                     enemy_hit_player,
                     update_enemy_direction,
-                ),
+                )
+                    .run_if(in_state(AppState::Game))
+                    .run_if(in_state(SimulationState::Running)),
             );
     }
 }

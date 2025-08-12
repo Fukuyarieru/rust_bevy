@@ -1,6 +1,6 @@
 use bevy::{prelude::*, window::PrimaryWindow};
 
-use crate::prelude::*;
+use crate::imports::*;
 
 pub struct PlayerPlugin;
 
@@ -29,7 +29,10 @@ impl Plugin for PlayerPlugin {
                 player_movement.in_set(PlayerSystemSet::Movement),
                 confine_player_movement.in_set(PlayerSystemSet::Confinement),
                 player_hit_star,
-            ),
+            )
+                .chain()
+                .run_if(in_state(AppState::Game))
+                .run_if(in_state(SimulationState::Running)),
         );
     }
 }

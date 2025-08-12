@@ -1,6 +1,8 @@
+pub(super) use crate::app_states::*;
 pub(super) use crate::enemy::*;
 pub(super) use crate::events::*;
 pub(super) use crate::game::*;
+pub(super) use crate::main_menu::*;
 pub(super) use crate::player::*;
 pub(super) use crate::score::*;
 pub(super) use crate::settings::*;

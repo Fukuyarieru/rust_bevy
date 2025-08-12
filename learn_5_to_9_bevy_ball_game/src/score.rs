@@ -1,4 +1,4 @@
-use crate::prelude::*;
+use crate::imports::*;
 use bevy::prelude::*;
 
 pub struct ScorePlugin;

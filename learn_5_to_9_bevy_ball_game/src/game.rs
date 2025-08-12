@@ -1,4 +1,4 @@
-use crate::prelude::*;
+use crate::imports::*;
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
@@ -13,7 +13,9 @@ impl Plugin for GamePlugin {
             ScorePlugin,
             StarPlugin,
             EnemyPlugin,
-        ));
+        ))
+        .init_state::<AppState>()
+        .init_state::<SimulationState>();
     }
 }
 
@@ -53,4 +55,11 @@ pub fn handle_game_over(mut game_over_event_reader: EventReader<GameOver>) {
     for event in game_over_event_reader.read() {
         println!("Your final score is {}", event.score)
     }
+}
+
+#[derive(States, Debug, Clone, PartialEq, Eq, Hash, Default)]
+pub enum SimulationState {
+    Running,
+    #[default]
+    Paused,
 }
